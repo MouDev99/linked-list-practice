@@ -128,43 +128,104 @@ class LinkedList:
 
   # TODO: Implement the contains_value method here
   def contains_value(self, target):
-    pass
+    currNode = self._head
+    while currNode:
+      if currNode._value == target:
+        return True
+      currNode = currNode._next
+
+    return False
 
   # TODO: Implement the insert_value method here
   def insert_value(self, position, value):
-    pass
+    if position < 0 or position > self._length:
+      return False
+    elif position == 0:
+      self.add_to_head(value)
+      return True
+    elif position == self._length:
+      self.add_to_tail(value)
+      return True
+
+    new_node = Node(value)
+    previous_node = self._head
+    node_to_move = self._head._next
+    i = 1
+    while previous_node:
+      if i == position:
+        previous_node._next = new_node
+        new_node._next = node_to_move
+        self._length += 1
+        return True
+
+      previous_node = node_to_move
+      node_to_move = node_to_move._next
+      i += 1
+
 
   # TODO: Implement the update_value method here
   def update_value(self, position, value):
-    pass
+    node_to_update = self.get_node(position)
+    if node_to_update:
+      node_to_update._value = value
+      return True
+    return False
 
   # TODO: Implement the remove_node method here
   def remove_node(self, position):
-    pass
+    if position < 0 or position >= self._length:
+      return False
+    elif position == 0:
+      return self.remove_head()
+    elif position == self._length -1:
+      return self.remove_tail()
+
+    previous_node = self._head
+    node_to_remove = self._head._next
+    i = 1
+    while previous_node:
+      if i == position:
+        previous_node._next = node_to_remove._next
+        self._length -= 1
+        return node_to_remove
+      previous_node = node_to_remove
+      node_to_remove = node_to_remove._next
+      i += 1
+
 
   # TODO: Implement the __str__ method here
   def __str__(self):
-    pass
+    if not self._head:
+      return "Empty List"
+
+    values_strings = ""
+    currNode = self._head
+    while currNode:
+      values_strings += str(currNode._value + " --> ")
+      currNode = currNode._next
+
+    values_strings = values_strings[0:-5]
+    return values_strings
 
 # Phase 1 Manual Testing:
 
 # 1. Test Node and LinkedList initialization
-node = Node('hello')
-print(node)                                     # <__main__.Node object at ...>
-print(node._value)                              # hello
-linked_list = LinkedList()
+# node = Node('hello')
+# print(node)                                     # <__main__.Node object at ...>
+# print(node._value)                              # hello
+# linked_list = LinkedList()
 # print(linked_list)                              # <__main__.LinkedList object at ...>
 
 # 2. Test getting a node by its position
 # print(linked_list.get_node(0))                # None
 
 # # 3. Test adding a node to the list's tail
-linked_list.add_to_tail('new tail node')
+# linked_list.add_to_tail('new tail node')
 # print(linked_list.get_node(0))                # <__main__.Node object at ...>
 # print(linked_list.get_node(0)._value)         # `new tail node`
 
 # # 4. Test adding a node to list's head
-linked_list.add_to_head('new head node')
+# linked_list.add_to_head('new head node')
 # print(linked_list.get_node(0))                # <__main__.Node object at ...>
 # print(linked_list.get_node(0)._value)         # `new head node`
 
@@ -179,7 +240,7 @@ linked_list.add_to_head('new head node')
 # print(linked_list.get_node(0))                # None
 
 # # 7. Test returning the list length
-print(len(linked_list))                                 # 2
+# print(len(linked_list))                                 # 2
 
 # Phase 2 Manual Testing
 
@@ -198,14 +259,16 @@ print(len(linked_list))                                 # 2
 # print(linked_list.get_node(0)._value)                   # `goodbye!`
 
 # # 4. Test removing a node value from the list at a specific position
-# print(linked_list.get_node(1)._value)                   # `new head node`
-# linked_list.remove_node(1)
-# print(linked_list.get_node(1))                          # None
+# print(linked_list.get_node(0)._value)                   # `new head node`
+# linked_list.remove_node(0)
+# print(linked_list.get_node(0))                          # None
 
 # # 5. Format the list as a string whenever `print()` is invoked
-# new_linked_list = LinkedList()
-# print(new_linked_list)                  # Empty List
-# new_linked_list.add_to_tail('puppies')
-# print(new_linked_list)                  # puppies
-# new_linked_list.add_to_tail('kittens')
-# print(new_linked_list)                  # puppies, kittens
+new_linked_list = LinkedList()
+print(new_linked_list)                  # Empty List
+new_linked_list.add_to_tail('puppies')
+print(new_linked_list)                  # puppies
+new_linked_list.add_to_tail('kittens')
+print(new_linked_list)                  # puppies --> kittens
+new_linked_list.add_to_tail('geckos')
+print(new_linked_list)                  # puppies --> kittens --> geckos
